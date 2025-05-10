@@ -1,7 +1,6 @@
-/*  your css code here. If applicable */
 body {
   font-family: Arial, sans-serif;
-  background: #f0f8ff;
+  background-color: #eef5ff;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -10,35 +9,34 @@ body {
 
 .container {
   background: white;
-  padding: 30px;
+  padding: 30px 40px;
   border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
   text-align: center;
-  width: 400px;
 }
 
 input {
-  width: 90%;
+  width: 80%;
   padding: 10px;
-  margin: 10px 0;
   font-size: 16px;
+  margin-bottom: 15px;
 }
 
 button {
   padding: 10px 20px;
-  font-size: 16px;
   background-color: #0077cc;
   color: white;
   border: none;
-  cursor: pointer;
+  font-size: 16px;
   border-radius: 5px;
+  cursor: pointer;
 }
 
 button:hover {
   background-color: #005fa3;
 }
 
-#result {
+#output {
   margin-top: 20px;
   font-size: 18px;
   color: #333;
