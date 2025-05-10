@@ -1,4 +1,4 @@
-function calculateMinCost() {
+function MinCost() {
   const input = document.getElementById("ropeInput").value;
   const arr = input.split(',').map(x => parseInt(x.trim(), 10)).filter(x => !isNaN(x));
 
