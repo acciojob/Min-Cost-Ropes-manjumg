@@ -1,46 +1,60 @@
-function mincost(arr) {
-    if (arr.length === 0) return 0;
+// index.js
 
-    // Use a min-heap implemented via a priority queue
-    let heap = [...arr];
-    heap.sort((a, b) => a - b); // initialize as min-heap
+const express = require("express");
+const bodyParser = require("body-parser");
 
-    let totalCost = 0;
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-    while (heap.length > 1) {
-        // Always extract the two smallest ropes
-        const first = heap.shift();
-        const second = heap.shift();
-        const cost = first + second;
-        totalCost += cost;
+app.use(bodyParser.json());
 
-        // Insert the new rope back, keeping heap sorted
+// ✅ Min-Cost Rope Function
+function minCost(arr) {
+    if (!Array.isArray(arr) || arr.length === 0) return 0;
+
+    // Create a min-heap via sorting
+    const minHeap = [...arr].sort((a, b) => a - b);
+    let cost = 0;
+
+    while (minHeap.length > 1) {
+        const first = minHeap.shift();
+        const second = minHeap.shift();
+        const newRope = first + second;
+        cost += newRope;
+
+        // Insert new rope into the correct position to maintain heap order
         let inserted = false;
-        for (let i = 0; i < heap.length; i++) {
-            if (cost < heap[i]) {
-                heap.splice(i, 0, cost);
+        for (let i = 0; i < minHeap.length; i++) {
+            if (newRope < minHeap[i]) {
+                minHeap.splice(i, 0, newRope);
                 inserted = true;
                 break;
             }
         }
-        if (!inserted) heap.push(cost); // append at end if largest
+        if (!inserted) minHeap.push(newRope); // largest, append to end
     }
 
-    return totalCost;
+    return cost;
 }
 
-function calculateMinCost() {
-    const input = document.getElementById("ropeInput").value;
-    const arr = input
-        .split(",")
-        .map(x => parseInt(x.trim()))
-        .filter(x => !isNaN(x) && x > 0);
+// ✅ POST API Route
+app.post("/mincost", (req, res) => {
+    try {
+        const { arr } = req.body;
 
-    if (arr.length < 2) {
-        document.getElementById("result").textContent = "Please enter at least two positive numbers.";
-        return;
+        if (!Array.isArray(arr) || arr.some(x => typeof x !== "number" || x <= 0)) {
+            return res.status(400).json({ message: "Invalid input. Please send an array of positive numbers." });
+        }
+
+        const result = minCost(arr);
+        return res.status(200).json({ message: result });
+    } catch (error) {
+        console.error("Server error:", error);
+        return res.status(500).json({ message: "Internal Server Error" });
     }
+});
 
-    const result = mincost(arr);
-    document.getElementById("result").textContent = `Minimum cost to connect ropes: ${result}`;
-}
+// ✅ Start Server
+app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+});
